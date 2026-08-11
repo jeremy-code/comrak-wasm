@@ -1,0 +1,45 @@
+[package]
+name        = "comrak-wasm"
+version     = "0.0.0"
+authors     = ["Jeremy Nguyen <hi@jeremy.ng>"]
+edition     = "2024"
+description = "Comrak markdown parser compiled to WebAssembly"
+readme      = "README.md"
+repository  = "https://github.com/jeremy-code/comrak-wasm"
+license     = "BSD-2-Clause"
+keywords    = ["commonmark", "markdown"]
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+# In version 0.53.0, comrak introduced alternative syntect backends, making
+# Oniguruma the default. Since oniguruma is not WASM-compatible due to including
+# stdlib.h in oniguruma/src/regexec.c:36, this means we have to compile without
+# the default features.
+#
+# https://github.com/kivikakk/comrak/blob/c5a3b45ce94460e37c54408cd51d9b526e8cb4d8/Cargo.toml#L71
+# https://github.com/kivikakk/comrak/pull/812
+# https://github.com/trishume/syntect/#pure-rust-fancy-regex-mode-without-onig
+comrak = { version = "0.54.0", default-features = false, features = [
+  "bon",
+  "cli",
+  "syntect-fancy",
+] }
+wasm-bindgen = "0.2.127"
+serde = { version = "1.0.229", features = ["derive"] }
+serde-wasm-bindgen = "0.6.5"
+tsify = { version = "0.5.6", features = ["js", "wasm-bindgen"] }
+
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = ["-Oz"]
+
+[profile.release]
+lto           = true
+opt-level     = "z"
+strip         = true
+codegen-units = 1
+panic         = "abort"
+
+[profile.release.package.comrak-wasm]
+strip = "debuginfo"
