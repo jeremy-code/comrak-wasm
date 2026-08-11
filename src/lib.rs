@@ -1,9 +1,6 @@
 mod options;
 
-use comrak::{
-    Options as ComrakOptions, markdown_to_commonmark_xml as comrak_markdown_to_commonmark_xml,
-    markdown_to_html as comrak_markdown_to_html,
-};
+use comrak::Options as ComrakOptions;
 use options::Options;
 use serde::Deserialize;
 use wasm_bindgen::prelude::*;
@@ -23,7 +20,7 @@ pub fn markdown_to_commonmark_xml(
         true => ComrakOptions::default(),
     };
 
-    Ok(comrak_markdown_to_commonmark_xml(md, &overrides))
+    Ok(comrak::markdown_to_commonmark_xml(md, &overrides))
 }
 
 #[wasm_bindgen(js_name = markdownToHtml)]
@@ -36,5 +33,5 @@ pub fn markdown_to_html(
         true => ComrakOptions::default(),
     };
 
-    Ok(comrak_markdown_to_html(md, &overrides))
+    Ok(comrak::markdown_to_html(md, &overrides))
 }
