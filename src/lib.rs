@@ -6,7 +6,6 @@ use comrak::{
 };
 use options::Options;
 use serde::Deserialize;
-
 use wasm_bindgen::prelude::*;
 
 #[derive(Deserialize)]

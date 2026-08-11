@@ -1,3 +1,4 @@
+use comrak::Options as ComrakOptions;
 use comrak::options::{
     AlertStyleType as ComrakAlertStyleType, BrokenLinkCallback, Extension as ComrakExtension,
     ListStyleType as ComrakListStyleType, Parse as ComrakParse, Render as ComrakRender,
@@ -7,11 +8,10 @@ use serde::Deserialize;
 use std::sync::Arc;
 use tsify::Tsify;
 
-use comrak::Options as ComrakOptions;
-
 #[derive(Tsify, Deserialize, Default)]
 #[serde(default)]
 #[serde(remote = "ComrakOptions")]
+#[serde(rename_all = "camelCase")]
 pub struct Options<'c> {
     #[serde(with = "Extension")]
     #[tsify(type = "Extension")]
