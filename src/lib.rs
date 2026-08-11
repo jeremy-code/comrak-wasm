@@ -8,6 +8,11 @@ use wasm_bindgen::prelude::*;
 #[derive(Deserialize)]
 struct OptionsHelper<'c>(#[serde(with = "Options")] ComrakOptions<'c>);
 
+#[wasm_bindgen]
+pub fn version() -> String {
+    comrak::version().to_owned()
+}
+
 #[wasm_bindgen(js_name = markdownToCommonmarkXml)]
 pub fn markdown_to_commonmark_xml(
     md: &str,
