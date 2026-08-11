@@ -1,0 +1,11 @@
+# Dependency Resolution (https://pnpm.io/settings#dependency-resolution)
+update:
+    githubActions: true
+minimumReleaseAge: 1440 # 1 day in minutes
+minimumReleaseAgeStrict: true
+trustPolicy: no-downgrade
+blockExoticSubdeps: true
+
+# Build settings (https://pnpm.io/settings#build-settings)
+verifyDepsBeforeRun: install
+strictDepBuilds: true

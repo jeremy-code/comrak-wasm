@@ -1,0 +1,28 @@
+{
+    "name": "comrak-wasm",
+    "version": "0.0.0",
+    "private": true,
+    "license": "BSD-2-Clause",
+    "scripts": {
+        "lint": "cargo clippy --all-targets --all-features",
+        "format": "oxfmt && cargo fmt --all",
+        "format:check": "oxfmt --check && cargo fmt --all --check",
+        "build": "wasm-pack build --target web --release"
+    },
+    "devDependencies": {
+        "@changesets/cli": "^2.31.1",
+        "oxfmt": "^0.62.0"
+    },
+    "devEngines": {
+        "packageManager": {
+            "name": "pnpm",
+            "version": "11.20.0",
+            "onFail": "download"
+        },
+        "runtime": {
+            "name": "node",
+            "version": "^24.19.0",
+            "onFail": "download"
+        }
+    }
+}

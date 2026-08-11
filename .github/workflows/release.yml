@@ -1,23 +1,29 @@
-name: CI
+name: Release
 
 on:
     push:
         branches: ["main"]
-    pull_request:
-        types: [opened, synchronize]
 
 permissions: {} # Each job defines its own permissions explicitly
 
-jobs:
-    build:
-        name: Build
-        permissions:
-            contents: read # Access to check out code and install dependencies
-        runs-on: ubuntu-latest
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
 
+jobs:
+    release:
+        name: Release
+        runs-on: ubuntu-latest
+        permissions:
+            id-token: write # This is required for requesting the JWT
+            contents: write # Required to create release
+            pull-requests: write # Required to create PR
         steps:
             - name: Check out Git repository
               uses: actions/checkout@v7
+              with:
+                  # Fetch all history for all branches and tags so that changesets can
+                  # compare against the correct base branch
+                  fetch-depth: 0
 
             - name: Set up pnpm package manager
               uses: pnpm/setup@v2
@@ -44,11 +50,15 @@ jobs:
             - name: Install wasm-pack
               run: cargo install wasm-pack
 
-            - name: Lint code with Clippy
-              run: pnpm run lint
-
-            - name: Check code formatting with rustfmt, oxfmt
-              run: pnpm run format:check
-
             - name: Build
               run: pnpm run build
+
+            - name: Create pull request for version bump and publish to npm
+              uses: changesets/action@v1
+              with:
+                  publish: pnpm stage publish ./pkg/
+                  version: pnpm exec changeset version
+                  commit: "chore(release): version packages"
+                  title: "chore(release): version packages"
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

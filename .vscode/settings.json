@@ -1,5 +1,11 @@
 {
-  "[rust]": {
-    "editor.defaultFormatter": "rust-lang.rust-analyzer"
-  }
+    // While I dislike it, it is what is used in Rust's 2024 style guide
+    "editor.tabSize": 4,
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "[rust]": {
+        "editor.defaultFormatter": "rust-lang.rust-analyzer"
+    },
+    "[json][jsonc][toml][yaml]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
+    }
 }

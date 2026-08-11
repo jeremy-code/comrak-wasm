@@ -19,15 +19,15 @@ import init, { renderMarkdown } from "comrak-wasm";
 
 await init();
 const html = markdownToHtml(
-  `# Hello world!
+    `# Hello world!
 1. Do ~~you~~ like [pretty](#) paintings?
 2. Or *pretty* music?
 `,
-  {
-    extension: {
-      strikethrough: true,
+    {
+        extension: {
+            strikethrough: true,
+        },
     },
-  },
 );
 
 // <h1>Hello world!</h1>
@@ -46,7 +46,7 @@ import init, { renderMarkdown } from "comrak-wasm";
 import { createReadStream } from "node:fs";
 
 const wasmModuleResponse = new Response(
-  createReadStream("./dist/comrak_wasm_bg.wasm"),
+    createReadStream("./dist/comrak_wasm_bg.wasm"),
 );
 response.headers.set("Content-Type", "application/wasm");
 
@@ -63,8 +63,8 @@ import init, { renderMarkdown } from "comrak-wasm";
 import wasmModuleUrl from "comrak-wasm/comrak_wasm_bg.wasm?url";
 
 await init({
-  // Alternatively, `import.meta.resolve("comrak-wasm/comrak_wasm_bg.wasm")`
-  module_or_path: new URL(wasmModuleUrl),
+    // Alternatively, `import.meta.resolve("comrak-wasm/comrak_wasm_bg.wasm")`
+    module_or_path: new URL(wasmModuleUrl),
 });
 const html = markdownToHtml(/* ... */);
 ```
@@ -81,21 +81,21 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export default {
-  entry: "./src/index.js",
-  output: {
-    filename: "main.js",
-    path: resolve(__dirname, "dist"),
-  },
-  module: {
-    rules: [
-      {
-        // Or if you don't want to use a resourceQuery, you can enable it for .wasm files
-        // test: /\.wasm/,
-        resourceQuery: /url/,
-        type: "asset/resource",
-      },
-    ],
-  },
+    entry: "./src/index.js",
+    output: {
+        filename: "main.js",
+        path: resolve(__dirname, "dist"),
+    },
+    module: {
+        rules: [
+            {
+                // Or if you don't want to use a resourceQuery, you can enable it for .wasm files
+                // test: /\.wasm/,
+                resourceQuery: /url/,
+                type: "asset/resource",
+            },
+        ],
+    },
 };
 ```
 
