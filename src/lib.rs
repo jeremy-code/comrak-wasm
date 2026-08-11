@@ -9,7 +9,7 @@ use serde::Deserialize;
 use wasm_bindgen::prelude::*;
 
 #[derive(Deserialize)]
-struct Helper<'c>(#[serde(with = "Options")] ComrakOptions<'c>);
+struct OptionsHelper<'c>(#[serde(with = "Options")] ComrakOptions<'c>);
 
 #[wasm_bindgen(js_name = markdownToCommonmarkXml)]
 pub fn markdown_to_commonmark_xml(
@@ -19,7 +19,7 @@ pub fn markdown_to_commonmark_xml(
     #[wasm_bindgen(unchecked_param_type = "Options | undefined")] options: JsValue,
 ) -> Result<String, JsError> {
     let overrides: ComrakOptions = match options.is_undefined() {
-        false => serde_wasm_bindgen::from_value(options).map(|Helper(options)| options)?,
+        false => serde_wasm_bindgen::from_value(options).map(|OptionsHelper(options)| options)?,
         true => ComrakOptions::default(),
     };
 
@@ -32,7 +32,7 @@ pub fn markdown_to_html(
     #[wasm_bindgen(unchecked_param_type = "Options | undefined")] options: JsValue,
 ) -> Result<String, JsError> {
     let overrides: ComrakOptions = match options.is_undefined() {
-        false => serde_wasm_bindgen::from_value(options).map(|Helper(options)| options)?,
+        false => serde_wasm_bindgen::from_value(options).map(|OptionsHelper(options)| options)?,
         true => ComrakOptions::default(),
     };
 
