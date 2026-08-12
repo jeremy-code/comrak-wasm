@@ -9,3 +9,5 @@ blockExoticSubdeps: true
 # Build settings (https://pnpm.io/settings#build-settings)
 verifyDepsBeforeRun: install
 strictDepBuilds: true
+allowBuilds:
+    wasm-pack: true
