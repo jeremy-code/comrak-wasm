@@ -1,5 +1,5 @@
 mod broken_link_callback;
-mod js_url_rewriter;
+mod url_rewriter;
 
 use comrak::Options as ComrakOptions;
 use comrak::options::{
@@ -56,10 +56,10 @@ pub struct Extension<'c> {
     pub subscript: bool,
     pub spoiler: bool,
     pub greentext: bool,
-    #[serde(with = "js_url_rewriter")]
+    #[serde(with = "url_rewriter")]
     #[tsify(type = "(url: string) => string")]
     pub image_url_rewriter: Option<Arc<dyn URLRewriter + 'c>>,
-    #[serde(with = "js_url_rewriter")]
+    #[serde(with = "url_rewriter")]
     #[tsify(type = "(url: string) => string")]
     pub link_url_rewriter: Option<Arc<dyn URLRewriter + 'c>>,
     pub cjk_friendly_emphasis: bool,

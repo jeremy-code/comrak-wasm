@@ -1,9 +1,19 @@
+use comrak::ResolvedReference as ComrakResolvedReference;
+use comrak::options::{
+    BrokenLinkCallback as ComrakBrokenLinkCallback,
+    BrokenLinkReference as ComrakBrokenLinkReference,
+};
 use serde::{Deserialize, Deserializer, Serialize};
 use std::sync::Arc;
 use tsify::Tsify;
 use wasm_bindgen::prelude::*;
 
 struct BrokenLinkCallback(js_sys::Function);
+
+// TODO: There has be a better way to do this. `BrokenLinkReference` I
+// understand needing a separate struct, since its members are type `&'l str`,
+// but there should be a way to deserialize `ResolvedReference` into its comrak
+// struct without the intermediary.
 
 #[derive(Tsify, Serialize)]
 struct BrokenLinkReference {
@@ -30,51 +40,52 @@ struct ResolvedReference {
     pub title: String,
 }
 
-impl comrak::options::BrokenLinkCallback for BrokenLinkCallback {
+impl ComrakBrokenLinkCallback for BrokenLinkCallback {
     fn resolve(
         &self,
-        broken_link_reference: comrak::options::BrokenLinkReference,
-    ) -> Option<comrak::ResolvedReference> {
-        let reference_value = BrokenLinkReference {
-            normalized: broken_link_reference.normalized.to_string(),
-            original: broken_link_reference.original.to_string(),
-        };
-
-        let result = self
+        broken_link_reference: ComrakBrokenLinkReference,
+    ) -> Option<ComrakResolvedReference> {
+        let js_value = self
             .0
             .call1(
                 &JsValue::UNDEFINED,
-                &serde_wasm_bindgen::to_value(&reference_value).ok()?,
+                &serde_wasm_bindgen::to_value(&BrokenLinkReference {
+                    normalized: broken_link_reference.normalized.to_string(),
+                    original: broken_link_reference.original.to_string(),
+                })
+                .ok()?,
             )
             .ok()?;
 
-        if result.is_undefined() || result.is_null() {
+        if js_value.is_null_or_undefined() {
             return None;
         }
 
-        let resolved: ResolvedReference = serde_wasm_bindgen::from_value(result).ok()?;
-        Some(comrak::ResolvedReference {
-            url: resolved.url,
-            title: resolved.title,
+        let resolved_reference: ResolvedReference =
+            serde_wasm_bindgen::from_value(js_value).ok()?;
+
+        Some(ComrakResolvedReference {
+            url: resolved_reference.url,
+            title: resolved_reference.title,
         })
     }
 }
 
 pub fn deserialize<'de, 'c, D>(
     deserializer: D,
-) -> Result<Option<Arc<dyn comrak::options::BrokenLinkCallback + 'c>>, D::Error>
+) -> Result<Option<Arc<dyn ComrakBrokenLinkCallback + 'c>>, D::Error>
 where
     D: Deserializer<'de>,
 {
-    let value: JsValue = serde_wasm_bindgen::preserve::deserialize(deserializer)?;
+    let js_value: JsValue = serde_wasm_bindgen::preserve::deserialize(deserializer)?;
 
-    if value.is_undefined() || value.is_null() {
+    if js_value.is_null_or_undefined() {
         return Ok(None);
     }
 
-    let func = value.dyn_into::<js_sys::Function>().map_err(|_| {
+    let broken_link_callback = js_value.dyn_into::<js_sys::Function>().map_err(|_| {
         serde::de::Error::custom("Expected a function for the broken link callback option")
     })?;
 
-    Ok(Some(Arc::new(BrokenLinkCallback(func))))
+    Ok(Some(Arc::new(BrokenLinkCallback(broken_link_callback))))
 }
