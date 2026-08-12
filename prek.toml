@@ -1,0 +1,31 @@
+# https://prek.j178.dev/reference/configuration/
+
+[[repos]]
+repo = "local"
+
+[[repos.hooks]]
+id = "format:cargo-fmt"
+name = "cargo fmt"
+entry = "cargo fmt"
+language = "system"
+args = ["--check", "--"]
+pass_filenames = true
+types = ["rust"]
+
+[[repos.hooks]]
+id = "format:oxfmt"
+name = "oxfmt"
+entry = "pnpm exec oxfmt"
+language = "system"
+args = ["--check"]
+pass_filenames = true
+types_or = ["json", "markdown", "toml", "yaml"]
+
+[[repos.hooks]]
+id = "lint:cargo-clippy"
+name = "cargo clippy"
+entry = "cargo clippy"
+language = "system"
+args = ["--all-features", "--all-targets"]
+pass_filenames = false
+types = ["rust"]
