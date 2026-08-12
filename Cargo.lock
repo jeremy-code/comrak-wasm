@@ -225,6 +225,7 @@ name = "comrak-wasm"
 version = "0.0.1"
 dependencies = [
  "comrak",
+ "js-sys",
  "serde",
  "serde-wasm-bindgen",
  "tsify",
