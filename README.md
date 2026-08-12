@@ -5,17 +5,19 @@
 [github-actions]: https://www.github.com/jeremy-code/comrak-wasm/actions/workflows/ci.yml
 [github-actions-badge]: https://www.github.com/jeremy-code/comrak-wasm/actions/workflows/ci.yml/badge.svg
 [license-badge]: https://img.shields.io/github/license/jeremy-code/comrak-wasm
+[npm-version-badge]: https://img.shields.io/npm/v/comrak-wasm
+[npm-package]: https://www.npmjs.com/package/comrak-wasm
 
-[![GitHub Actions][github-actions-badge]][github-actions] [![License][license-badge]](LICENSE)
+[![GitHub Actions][github-actions-badge]][github-actions] [![License][license-badge]](LICENSE) [![NPM version][npm-version-badge]][npm-package]
 
-A WebAssembly package exposing Comrak markdown rendering to JavaScript.
+Comrak markdown parser compiled to WebAssembly with JavaScript bindings.
 
 ## Usage
 
 ### Browser
 
 ```js
-import init, { renderMarkdown } from "comrak-wasm";
+import init, { markdownToHtml } from "comrak-wasm";
 
 await init();
 const html = markdownToHtml(
@@ -42,15 +44,15 @@ console.log(html);
 ### Node.js
 
 ```js
-import init, { renderMarkdown } from "comrak-wasm";
+import init, { markdownToHtml } from "comrak-wasm";
 import { createReadStream } from "node:fs";
 
 const wasmModuleResponse = new Response(
-    createReadStream("./dist/comrak_wasm_bg.wasm"),
+    createReadStream("comrak-wasm/comrak_wasm_bg.wasm"),
 );
-response.headers.set("Content-Type", "application/wasm");
+wasmModuleResponse.headers.set("Content-Type", "application/wasm");
 
-await init({ module_or_path: response });
+await init({ module_or_path: wasmModuleResponse });
 const html = markdownToHtml(/* ... */);
 ```
 
@@ -59,12 +61,31 @@ const html = markdownToHtml(/* ... */);
 #### Vite
 
 ```js
-import init, { renderMarkdown } from "comrak-wasm";
+import init, { markdownToHtml } from "comrak-wasm";
 import wasmModuleUrl from "comrak-wasm/comrak_wasm_bg.wasm?url";
 
 await init({
     // Alternatively, `import.meta.resolve("comrak-wasm/comrak_wasm_bg.wasm")`
     module_or_path: new URL(wasmModuleUrl),
+});
+const html = markdownToHtml(/* ... */);
+```
+
+You might also consider importing the Wasm module from a CDN like so:
+
+```js
+import init, { markdownToHtml } from "comrak-wasm";
+
+await init({
+    module_or_path: fetch(
+        // https://unpkg.com/comrak-wasm@^0.0.1/comrak_wasm_bg.wasm
+        "https://esm.sh/comrak-wasm@^0.0.1/comrak_wasm_bg.wasm",
+        {
+            headers: {
+                Accept: "application/wasm",
+            },
+        },
+    ),
 });
 const html = markdownToHtml(/* ... */);
 ```
