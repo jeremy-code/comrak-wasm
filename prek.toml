@@ -1,5 +1,7 @@
 # https://prek.j178.dev/reference/configuration/
 
+default_install_hook_types = ["pre-commit", "commit-msg"]
+
 [[repos]]
 repo = "local"
 
@@ -29,3 +31,12 @@ language = "system"
 args = ["--all-features", "--all-targets"]
 pass_filenames = false
 types = ["rust"]
+
+[[repos.hooks]]
+id = "commitlint"
+name = "commitlint"
+entry = "pnpm exec commitlint"
+language = "system"
+args = ["--edit"]
+pass_filenames = false
+stages = ["commit-msg"]
