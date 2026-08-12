@@ -30,6 +30,10 @@ jobs:
               with:
                   cache: true
 
+            - uses: cargo-bins/cargo-binstall@main
+              with:
+                  version: 1.21.1
+
             - name: Install dependencies
               run: pnpm install
 
@@ -47,14 +51,23 @@ jobs:
                   sudo apt-get update
                   sudo apt-get --assume-yes install binaryen
 
+            - name: Install cargo-edit
+              run: |
+                  cargo binstall --no-confirm cargo-edit@0.13.13
+
             - name: Build
               run: pnpm run build
 
             - name: Create pull request for version bump and publish to npm
               uses: changesets/action@v1
               with:
-                  publish: pnpm stage publish ./pkg/
-                  version: pnpm exec changeset version
+                  publish: pnpm run ci:publish
+                  # Has to be in its own script, otherwise, error "Too many
+                  # arguments passed to changesets - we only accept the command
+                  # name as an argument"
+                  #
+                  # https://github.com/frontity/frontity/issues/386
+                  version: pnpm run ci:version
                   commit: "chore(release): version packages"
                   title: "chore(release): version packages"
               env:
