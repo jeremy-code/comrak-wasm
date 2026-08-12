@@ -1,3 +1,4 @@
+mod broken_link_callback;
 mod js_url_rewriter;
 
 use comrak::Options as ComrakOptions;
@@ -84,7 +85,10 @@ pub struct Parse<'c> {
     pub tasklist_in_table: bool,
     pub relaxed_autolinks: bool,
     pub ignore_setext: bool,
-    #[serde(skip)]
+    #[serde(with = "broken_link_callback")]
+    #[tsify(
+        type = "(brokenLinkReference: BrokenLinkReference) => ResolvedReference | undefined | null"
+    )]
     pub broken_link_callback: Option<Arc<dyn BrokenLinkCallback + 'c>>,
     pub leave_footnote_definitions: bool,
     pub escaped_char_spans: bool,
