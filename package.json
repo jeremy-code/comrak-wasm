@@ -10,7 +10,7 @@
         "format:check": "oxfmt --check && cargo fmt --all --check",
         "build": "wasm-pack build --target web --release",
         "dev": "wasm-pack build --target web --dev",
-        "ci:version": "changeset version && pnpm pkg get version | xargs cargo set-version",
+        "ci:version": "changeset version && oxfmt CHANGELOG.md && pnpm pkg get version | xargs cargo set-version",
         "ci:publish": "pnpm stage publish pkg"
     },
     "devDependencies": {
