@@ -1,5 +1,11 @@
 # comrak-wasm
 
+## 0.0.4
+
+### Patch Changes
+
+- 2ff4e0b: chore: add comments to structs/interfaces
+
 ## 0.0.3
 
 ### Patch Changes
