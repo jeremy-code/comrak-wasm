@@ -46,11 +46,6 @@ jobs:
             - name: Add wasm32-unknown-unknown target to Rust toolchain
               run: rustup target add wasm32-unknown-unknown
 
-            - name: Install wasm-opt
-              run: |
-                  sudo apt-get update
-                  sudo apt-get --assume-yes install binaryen
-
             - name: Install cargo-edit
               run: |
                   cargo binstall --no-confirm cargo-edit@0.13.13
