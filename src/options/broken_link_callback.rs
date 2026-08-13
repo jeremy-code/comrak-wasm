@@ -10,6 +10,8 @@ use wasm_bindgen::prelude::*;
 
 #[derive(Tsify, Serialize)]
 #[serde(remote = "ComrakBrokenLinkReference")]
+/// Struct to the broken link callback, containing details on the link reference
+/// which failed to find a match.
 struct BrokenLinkReference<'l> {
     /// The normalized reference link label. Unicode case folding is applied;
     /// see <https://github.com/commonmark/commonmark-spec/issues/695> for a
@@ -25,13 +27,16 @@ struct BrokenLinkReferenceHelper<'l>(
     #[serde(with = "BrokenLinkReference")] ComrakBrokenLinkReference<'l>,
 );
 
-/*
- * Due to how structs are formatted data-wise, both `url` and `title` have to be
- * present in the object. If either of them are empty string, that property will
- * not be present in the output
- */
 #[derive(Tsify, Deserialize)]
 #[serde(remote = "ComrakResolvedReference")]
+/// A reference link's resolved details.
+///
+/// @remarks
+/// Due to how structs are formatted data-wise, both `url` and `title` have to
+/// be present in the object. If either of them are empty string, that property
+/// will not be present in the output
+///
+/// @see {@link https://github.com/jeremy-code/comrak-wasm/issues/5}
 struct ResolvedReference {
     /// The destination URL of the reference link.
     pub url: String,
