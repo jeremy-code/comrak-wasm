@@ -16,10 +16,9 @@ pub fn version() -> String {
 pub fn markdown_to_commonmark_xml(
     md: &str,
     // Otherwise, wasm_bindgen outputs `any` in TypeScript
-    // `options` is optional, but can't be represented by wasm_bindgen
-    #[wasm_bindgen(unchecked_param_type = "Options | undefined")] options: JsValue,
+    #[wasm_bindgen(unchecked_optional_param_type = "Options | undefined | null")] options: JsValue,
 ) -> Result<String, JsError> {
-    let comrak_options: comrak::Options = match options.is_undefined() {
+    let comrak_options: comrak::Options = match options.is_null_or_undefined() {
         false => serde_wasm_bindgen::from_value(options).map(|OptionsHelper(options)| options)?,
         true => comrak::Options::default(),
     };
@@ -30,9 +29,9 @@ pub fn markdown_to_commonmark_xml(
 #[wasm_bindgen(js_name = markdownToHtml)]
 pub fn markdown_to_html(
     md: &str,
-    #[wasm_bindgen(unchecked_param_type = "Options | undefined")] options: JsValue,
+    #[wasm_bindgen(unchecked_optional_param_type = "Options | undefined | null")] options: JsValue,
 ) -> Result<String, JsError> {
-    let comrak_options: comrak::Options = match options.is_undefined() {
+    let comrak_options: comrak::Options = match options.is_null_or_undefined() {
         false => serde_wasm_bindgen::from_value(options).map(|OptionsHelper(options)| options)?,
         true => comrak::Options::default(),
     };
