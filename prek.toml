@@ -19,9 +19,9 @@ id = "format:oxfmt"
 name = "oxfmt"
 entry = "pnpm exec oxfmt"
 language = "system"
-args = ["--check"]
+args = ["--check", "--no-error-on-unmatched-pattern"]
 pass_filenames = true
-types_or = ["json", "markdown", "toml", "yaml"]
+types_or = ["javascript", "json", "markdown", "toml", "yaml"]
 
 [[repos.hooks]]
 id = "lint:cargo-clippy"
