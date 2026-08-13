@@ -1,5 +1,13 @@
 # comrak-wasm
 
+## 0.0.3
+
+### Patch Changes
+
+- d3866a7: chore(deps): update deps
+- 4822b8e: feat: rewrite broken_link_callback to directly deserialize/serialize structs
+- ca598f6: feat: make options params optional, allow null in options
+
 ## 0.0.2
 
 ### Patch Changes

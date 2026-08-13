@@ -1,6 +1,6 @@
 [package]
 name = "comrak-wasm"
-version = "0.0.2"
+version = "0.0.3"
 authors = ["Jeremy Nguyen <hi@jeremy.ng>"]
 edition = "2024"
 description = "Comrak markdown parser compiled to WebAssembly"
