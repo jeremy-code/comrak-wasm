@@ -10,7 +10,7 @@
 
 [![GitHub Actions][github-actions-badge]][github-actions] [![License][license-badge]](LICENSE) [![NPM version][npm-version-badge]][npm-package]
 
-Comrak markdown parser compiled to WebAssembly with JavaScript bindings.
+Comrak markdown parser compiled to WebAssembly with JavaScript bindings. Documentation is avaliable at https://npmx.dev/package-docs/comrak-wasm/.
 
 ## Usage
 
