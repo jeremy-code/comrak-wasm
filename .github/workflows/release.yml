@@ -59,16 +59,18 @@ jobs:
               run: pnpm run build
 
             - name: Create pull request for version bump and publish to npm
-              uses: changesets/action@v1
+              uses: changesets/action@v2
               with:
-                  publish: pnpm run ci:publish
+                  publish-script: pnpm run ci:publish
                   # Has to be in its own script, otherwise, error "Too many
                   # arguments passed to changesets - we only accept the command
                   # name as an argument"
                   #
                   # https://github.com/frontity/frontity/issues/386
-                  version: pnpm run ci:version
-                  commit: "chore(release): version packages"
-                  title: "chore(release): version packages"
+                  version-script: pnpm run ci:version
+                  commit-message: "chore(release): version packages"
+                  pr-title: "chore(release): version packages"
+                  create-github-releases: true
+                  push-git-tags: true
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
