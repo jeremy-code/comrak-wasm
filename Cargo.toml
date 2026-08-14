@@ -33,7 +33,12 @@ tsify = { version = "0.5.6", features = ["js", "wasm-bindgen"] }
 js-sys = "0.3.104"
 
 [package.metadata.wasm-pack.profile.release]
-wasm-opt = ["-Oz"]
+wasm-opt = [
+    "--enable-nontrapping-float-to-int",
+    "--enable-simd",
+    "--enable-bulk-memory-opt",
+    "-Oz",
+]
 
 [profile.release]
 lto = true
@@ -42,5 +47,8 @@ strip = true
 codegen-units = 1
 panic = "abort"
 
-[profile.release.package.comrak-wasm]
-strip = "debuginfo"
+# [profile.release.package.comrak]
+# opt-level = 'z'
+
+# [profile.release.package.comrak-wasm]
+# opt-level = 'z'
