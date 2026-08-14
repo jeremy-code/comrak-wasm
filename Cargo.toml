@@ -5,16 +5,19 @@ authors = ["Jeremy Nguyen <hi@jeremy.ng>"]
 edition = "2024"
 description = "Comrak markdown parser compiled to WebAssembly"
 readme = "README.md"
+homepage = "https://www.npmjs.com/package/comrak-wasm"
 repository = "https://github.com/jeremy-code/comrak-wasm"
 license = "BSD-2-Clause"
 keywords = ["commonmark", "markdown"]
+# This Cargo.toml is only meant for building, do not publish to crates.io
+publish = false
 
 [lib]
 crate-type = ["cdylib"]
 
 [dependencies]
 # In version 0.53.0, comrak introduced alternative syntect backends, making
-# Oniguruma the default. Since oniguruma is not WASM-compatible due to including
+# Oniguruma the default. Since oniguruma is not Wasm-compatible due to including
 # stdlib.h in oniguruma/src/regexec.c:36, this means we have to compile without
 # the default features.
 #
@@ -26,11 +29,11 @@ comrak = { version = "0.54.0", default-features = false, features = [
     "cli",
     "syntect-fancy",
 ] }
-wasm-bindgen = "0.2.127"
+js-sys = "0.3.104"
 serde = { version = "1.0.229", features = ["derive"] }
 serde-wasm-bindgen = "0.6.5"
 tsify = { version = "0.5.6", features = ["js", "wasm-bindgen"] }
-js-sys = "0.3.104"
+wasm-bindgen = "0.2.127"
 
 [package.metadata.wasm-pack.profile.release]
 wasm-opt = [
@@ -41,14 +44,8 @@ wasm-opt = [
 ]
 
 [profile.release]
-lto = true
 opt-level = "z"
 strip = true
-codegen-units = 1
+lto = true
 panic = "abort"
-
-# [profile.release.package.comrak]
-# opt-level = 'z'
-
-# [profile.release.package.comrak-wasm]
-# opt-level = 'z'
+codegen-units = 1
