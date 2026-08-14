@@ -44,8 +44,9 @@ console.log(html);
 ### Node.js
 
 ```js
-import init, { markdownToHtml } from "comrak-wasm";
 import { createReadStream } from "node:fs";
+import { fileURLToPath } from "node:url";
+import init, { markdownToHtml } from "comrak-wasm";
 
 const wasmModuleResponse = new Response(
     createReadStream("comrak-wasm/comrak_wasm_bg.wasm"),
@@ -53,6 +54,26 @@ const wasmModuleResponse = new Response(
 wasmModuleResponse.headers.set("Content-Type", "application/wasm");
 
 await init({ module_or_path: wasmModuleResponse });
+const html = markdownToHtml(/* ... */);
+```
+
+### Deno
+
+You can use the `init` function with no configuration if you have `--allow-read` option enabled.
+
+```js
+import init, { markdownToHtml } from "comrak-wasm";
+
+await init();
+const html = markdownToHtml(/* ... */);
+```
+
+### Bun
+
+```js
+import init, { markdownToHtml } from "comrak-wasm";
+
+await init();
 const html = markdownToHtml(/* ... */);
 ```
 
