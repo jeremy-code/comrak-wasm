@@ -1,14 +1,15 @@
 use comrak::options::URLRewriter as ComrakURLRewriter;
+use js_sys::{Function, JsString};
 use serde::Deserializer;
 use std::sync::Arc;
 use wasm_bindgen::prelude::*;
 
-struct URLRewriter(js_sys::Function);
+struct URLRewriter(Function<fn(JsString) -> JsString>);
 
 impl ComrakURLRewriter for URLRewriter {
     fn to_html(&self, url: &str) -> String {
         self.0
-            .call1(&JsValue::UNDEFINED, &JsValue::from_str(url))
+            .call1(&JsValue::UNDEFINED, &JsString::from(url))
             .ok()
             .and_then(|result| result.as_string())
             .unwrap_or_else(|| url.to_string())
@@ -28,7 +29,7 @@ where
     }
 
     let url_rewriter = js_value
-        .dyn_into::<js_sys::Function>()
+        .dyn_into::<Function<fn(JsString) -> JsString>>()
         .map_err(|_| serde::de::Error::custom("Expected a function for the URL rewriter option"))?;
 
     Ok(Some(Arc::new(URLRewriter(url_rewriter))))

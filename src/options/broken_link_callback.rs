@@ -3,6 +3,7 @@ use comrak::options::{
     BrokenLinkCallback as ComrakBrokenLinkCallback,
     BrokenLinkReference as ComrakBrokenLinkReference,
 };
+use js_sys::Function;
 use serde::{Deserialize, Deserializer, Serialize};
 use std::sync::Arc;
 use tsify::Tsify;
@@ -48,7 +49,7 @@ struct ResolvedReference {
 #[derive(Deserialize)]
 struct ResolvedReferenceHelper(#[serde(with = "ResolvedReference")] ComrakResolvedReference);
 
-struct BrokenLinkCallback(js_sys::Function);
+struct BrokenLinkCallback(Function<fn(JsValue) -> JsValue>);
 
 impl ComrakBrokenLinkCallback for BrokenLinkCallback {
     fn resolve(
@@ -88,9 +89,11 @@ where
         return Ok(None);
     }
 
-    let broken_link_callback = js_value.dyn_into::<js_sys::Function>().map_err(|_| {
-        serde::de::Error::custom("Expected a function for the broken link callback option")
-    })?;
+    let broken_link_callback = js_value
+        .dyn_into::<Function<fn(JsValue) -> JsValue>>()
+        .map_err(|_| {
+            serde::de::Error::custom("Expected a function for the broken link callback option")
+        })?;
 
     Ok(Some(Arc::new(BrokenLinkCallback(broken_link_callback))))
 }
