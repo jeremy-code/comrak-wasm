@@ -5,7 +5,9 @@
     "[rust]": {
         "editor.defaultFormatter": "rust-lang.rust-analyzer"
     },
-    "[json][jsonc][toml][yaml]": {
+    "[javascript][json][jsonc][markdown][toml][yaml]": {
         "editor.defaultFormatter": "oxc.oxc-vscode"
-    }
+    },
+
+    "rust-analyzer.diagnostics.styleLints.enable": true
 }
