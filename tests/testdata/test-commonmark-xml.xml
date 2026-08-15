@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document SYSTEM "CommonMark.dtd">
+<document xmlns="http://commonmark.org/xml/1.0">
+  <heading level="1">
+    <text xml:space="preserve">Hello world</text>
+  </heading>
+  <paragraph>
+    <text xml:space="preserve">This is </text>
+    <strong>
+      <text xml:space="preserve">Markdown</text>
+    </strong>
+  </paragraph>
+  <heading level="2">
+    <text xml:space="preserve">Heading</text>
+  </heading>
+  <paragraph>
+    <text xml:space="preserve">This is a paragraph. It precedes an ordered list.</text>
+  </paragraph>
+  <list type="ordered" start="1" delim="period" tight="true">
+    <item>
+      <paragraph>
+        <text xml:space="preserve">Red</text>
+      </paragraph>
+    </item>
+    <item>
+      <paragraph>
+        <text xml:space="preserve">Blue</text>
+      </paragraph>
+    </item>
+    <item>
+      <paragraph>
+        <text xml:space="preserve">Orange</text>
+      </paragraph>
+    </item>
+  </list>
+</document>

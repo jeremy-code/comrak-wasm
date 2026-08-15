@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document SYSTEM "CommonMark.dtd">
+<document xmlns="http://commonmark.org/xml/1.0">
+  <heading level="1">
+    <text xml:space="preserve">Hello world</text>
+  </heading>
+  <paragraph>
+    <text xml:space="preserve">This is </text>
+    <strong>
+      <text xml:space="preserve">Markdown</text>
+    </strong>
+  </paragraph>
+  <paragraph>
+    <text xml:space="preserve">This is </text>
+    <strikethrough>
+      <text xml:space="preserve">struckthrough</text>
+    </strikethrough>
+    <text xml:space="preserve">. I also need to use asterisks to start an unordered list.</text>
+  </paragraph>
+  <list type="bullet" tight="true">
+    <item>
+      <paragraph>
+        <text xml:space="preserve">This is the list I was referring to</text>
+      </paragraph>
+    </item>
+    <item>
+      <paragraph>
+        <text xml:space="preserve">It has some items</text>
+      </paragraph>
+    </item>
+    <item>
+      <paragraph>
+        <text xml:space="preserve">But no order</text>
+      </paragraph>
+    </item>
+  </list>
+  <heading level="2">
+    <text xml:space="preserve">A heading</text>
+  </heading>
+  <paragraph>
+    <text xml:space="preserve">I also want to highlight something important: </text>
+    <highlight>
+      <text xml:space="preserve">you</text>
+    </highlight>
+    <text xml:space="preserve">!</text>
+  </paragraph>
+</document>

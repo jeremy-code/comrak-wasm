@@ -2,4 +2,5 @@
 target = "wasm32-unknown-unknown"
 
 [target.wasm32-unknown-unknown]
-rustflags = ["-C", 'target-feature=+simd128']
+rustflags = ["-C", "target-feature=+simd128"]
+runner = "wasm-bindgen-test-runner"

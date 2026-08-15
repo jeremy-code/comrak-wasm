@@ -10,6 +10,7 @@
         "format:check": "oxfmt --check && cargo fmt --all --check",
         "build": "wasm-pack build --target web --release",
         "dev": "wasm-pack build --target web --dev",
+        "test": "wasm-pack test --node",
         "ci:version": "changeset version && pnpm pkg get version | xargs cargo set-version",
         "ci:publish": "pnpm stage publish pkg"
     },

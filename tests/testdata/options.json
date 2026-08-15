@@ -1,0 +1,9 @@
+{
+    "extension": {
+        "strikethrough": true,
+        "highlight": true
+    },
+    "render": {
+        "listStyle": "star"
+    }
+}
