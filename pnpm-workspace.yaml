@@ -11,3 +11,6 @@ verifyDepsBeforeRun: install
 strictDepBuilds: true
 allowBuilds:
     wasm-pack: true
+
+# Other settings (https://pnpm.io/settings#other-settings)
+shellEmulator: true
