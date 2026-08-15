@@ -38,10 +38,7 @@ jobs:
               run: pnpm install
 
             - name: Install Rust
-              uses: dtolnay/rust-toolchain@stable
-              with:
-                  targets: wasm32-unknown-unknown
-                  components: rustfmt, clippy
+              run: rustup toolchain install --profile minimal
 
             - name: Install cargo-edit
               run: |
