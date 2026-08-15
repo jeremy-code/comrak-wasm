@@ -13,6 +13,25 @@ pub fn version() -> String {
     comrak::version().to_owned()
 }
 
+#[wasm_bindgen(js_name = escapeCommmonmarkInline)]
+/// Escapes the input, rendering it suitable for inclusion in a CommonMark
+/// document in a place where regular inline parsing is occurring. Note that
+/// this is not minimal --- there will be more escaping backslashes in the
+/// output than is strictly necessary. The rendering will not be affected,
+/// however.
+pub fn escape_commonmark_inline(text: &str) -> String {
+    comrak::escape_commonmark_inline(text)
+}
+
+#[wasm_bindgen(js_name = escapeCommonmarkLinkDestination)]
+/// Escapes the input URL, rendering it suitable for inclusion as a [link
+/// destination] per the CommonMark spec.
+///
+/// [link destination]: https://spec.commonmark.org/0.31.2/#link-destination
+pub fn escape_commonmark_link_destination(url: &str) -> String {
+    comrak::escape_commonmark_link_destination(url)
+}
+
 #[wasm_bindgen(js_name = markdownToCommonmarkXml)]
 /// Render Markdown to CommonMark XML.
 ///
