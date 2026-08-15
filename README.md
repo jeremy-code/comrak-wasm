@@ -141,6 +141,25 @@ export default {
 };
 ```
 
+#### Cloudflare Workers
+
+Cloudflare Workers ban the usage of `WebAssembly.compile`, `WebAssembly.compileStreaming`, `WebAssembly.instantiate` with arbitrary data and `WebAssembly.instantiateStreaming`.[^1] In workerd, a Wasm file can be directly imported as a `WebAssembly.Module` object.[^2]
+
+```js
+import wasmModule from "comrak-wasm/comrak_wasm_bg.wasm";
+import init, { markdownToHtml } from "comrak-wasm";
+
+await init({
+    module_or_path: wasmModule /* WebAssembly.Module */,
+});
+
+const html = markdownToHtml(/* ... */);
+```
+
+[^1]: https://developers.cloudflare.com/workers/runtime-apis/web-standards/#javascript-standards
+
+[^2]: See https://github.com/cloudflare/workers-sdk/blob/b8fd112136abf4ff17c3d456eaa7b22880bcaf6a/packages/miniflare/src/runtime/config/generated/workerd.ts#L933-L941 and https://github.com/cloudflare/workers-sdk/blob/b8fd112136abf4ff17c3d456eaa7b22880bcaf6a/fixtures/wasm-app/worker/module/export_wasm.js#L4
+
 ## License
 
 This project is licensed under the BSD 2-Clause. See the [LICENSE](LICENSE) file for details.
