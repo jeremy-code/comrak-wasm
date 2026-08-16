@@ -14,6 +14,8 @@ Comrak markdown parser compiled to WebAssembly with JavaScript bindings. Documen
 
 ## Usage
 
+For information regarding compatibility, see [COMPATIBILITY.md](COMPATIBILITY.md). For usage examples, see [jeremy-code/comrak-wasm-examples](https://github.com/jeremy-code/comrak-wasm-examples).
+
 ### Browser
 
 ```js
