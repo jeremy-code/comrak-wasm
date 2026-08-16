@@ -68,3 +68,47 @@ pub fn markdown_to_html(
 
     Ok(comrak::markdown_to_html(md, &comrak_options))
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::assert_matches;
+    use wasm_bindgen_test::*;
+
+    #[wasm_bindgen(inline_js = r#"
+export const create_options = () => ({
+    extension: {
+        strikethrough: true,
+        imageUrlRewriter: (url) =>
+            new URL(url, "https://www.example.com").toString(),
+    },
+    render: {
+        alertStyle: "semantic",
+    },
+    parse: {
+        smart: true,
+    },
+});
+"#)]
+    extern "C" {
+        fn create_options() -> JsValue;
+    }
+
+    #[wasm_bindgen_test]
+    fn test_deserialize_options() {
+        let options = deserialize_options(create_options()).unwrap();
+        assert_eq!(options.extension.strikethrough, true);
+        assert_matches!(
+            options.render.alert_style,
+            comrak::options::AlertStyleType::Semantic
+        );
+        assert_eq!(options.parse.smart, true);
+
+        let image_url_rewriter = options.extension.image_url_rewriter.as_ref().unwrap();
+
+        assert_eq!(
+            image_url_rewriter.to_html("image.png"),
+            "https://www.example.com/image.png"
+        );
+    }
+}

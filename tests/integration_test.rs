@@ -4,6 +4,28 @@ use wasm_bindgen::JsValue;
 use wasm_bindgen_test::*;
 
 #[wasm_bindgen_test]
+fn test_escape_commonmark_inline() {
+    assert_eq!(
+        escape_commonmark_inline("![Image](https://example.com)",),
+        r#"\!\[Image\]\(https://example\.com\)"#,
+    );
+    assert_eq!(
+        escape_commonmark_inline(
+            r#"In the Wikipedia page for "Scare quotes," the article claims that the editor Greil Marcus had "described scare quotes as 'the enemy.'""#,
+        ),
+        r#"In the Wikipedia page for \"Scare quotes,\" the article claims that the editor Greil Marcus had \"described scare quotes as 'the enemy\.'\""#,
+    );
+}
+
+#[wasm_bindgen_test]
+fn test_escape_commonmark_link_destination() {
+    assert_eq!(
+        escape_commonmark_link_destination(r#"link destination) <example>"#,),
+        r#"<link destination) \<example\>>"#,
+    );
+}
+
+#[wasm_bindgen_test]
 fn test_markdown_to_html() {
     let result = markdown_to_html(
         include_str!("testdata/test-markdown.md"),
