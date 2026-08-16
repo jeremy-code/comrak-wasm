@@ -1,11 +1,50 @@
+mod nodes;
 mod options;
 
+use nodes::NodeValue;
 use options::Options;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
 
 #[derive(Deserialize)]
 struct OptionsHelper<'c>(#[serde(with = "Options")] comrak::Options<'c>);
+
+#[wasm_bindgen]
+extern "C" {
+    // Use `js_namespace` here to bind `console.log(..)` instead of just
+    // `log(..)`
+    #[wasm_bindgen(js_namespace = console)]
+    fn log(s: &JsValue);
+}
+
+#[derive(Serialize)]
+struct NodeValueHelper(#[serde(with = "NodeValue")] comrak::nodes::NodeValue);
+
+#[wasm_bindgen]
+pub fn parse_document() {
+    let arena = comrak::Arena::new();
+    let document = comrak::parse_document(
+        &arena,
+        "# Hello world
+
+This is **Markdown**",
+        &comrak::Options::default(),
+    );
+    // The nodes can't be deserialized directly due to being cyclic (reference
+    // to parent and child), so theoretically, walk down all descendantss
+    // and make the connections in JS manually
+    for node in document.descendants() {
+        let js_value = serde_wasm_bindgen::to_value(&NodeValueHelper(node.data().value.clone()));
+        // Document
+        // { Heading: { level: 1, setext: false, closed: false } }
+        // { Text: 'Hello world' }
+        // Paragraph
+        // { Text: 'This is ' }
+        // Strong
+        // { Text: 'Markdown' }
+        log(&js_value.unwrap())
+    }
+}
 
 #[wasm_bindgen]
 /// Return the version of the crate.
