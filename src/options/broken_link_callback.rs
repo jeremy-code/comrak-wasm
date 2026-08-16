@@ -97,3 +97,52 @@ where
 
     Ok(Some(Arc::new(BrokenLinkCallback(broken_link_callback))))
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use wasm_bindgen_test::*;
+
+    #[wasm_bindgen(inline_js = r#"
+export const create_broken_link_callback = () => (broken_link_reference) => {
+    if (
+        broken_link_reference.normalized === "example" &&
+        broken_link_reference.original === "example"
+    ) {
+        return {
+            url: "http://example.com",
+            title: "Example",
+        };
+    }
+
+    return null;
+};
+"#)]
+    extern "C" {
+        fn create_broken_link_callback() -> Function<fn(JsValue) -> JsValue>;
+    }
+
+    #[wasm_bindgen_test]
+    fn test_broken_link_callback() {
+        let broken_link_callback = BrokenLinkCallback(create_broken_link_callback());
+
+        let resolved_reference = broken_link_callback.resolve(ComrakBrokenLinkReference {
+            normalized: "example",
+            original: "example",
+        });
+
+        let Some(ComrakResolvedReference { url, title }) = resolved_reference else {
+            panic!("expected broken link to be resolved");
+        };
+
+        assert_eq!(url, "http://example.com");
+        assert_eq!(title, "Example");
+
+        let unresolved_reference = broken_link_callback.resolve(ComrakBrokenLinkReference {
+            normalized: "casefolded",
+            original: "cAseFolDed",
+        });
+
+        assert!(unresolved_reference.is_none());
+    }
+}

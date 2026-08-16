@@ -34,3 +34,31 @@ where
 
     Ok(Some(Arc::new(URLRewriter(url_rewriter))))
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use js_sys::JsString;
+    use wasm_bindgen_test::*;
+
+    #[wasm_bindgen(inline_js = r#"
+export const create_url_rewriter = () => (url) =>
+    url.endsWith(".md") ? url.slice(0, url.length - ".md".length) : url;
+"#)]
+    extern "C" {
+        fn create_url_rewriter() -> Function<fn(JsString) -> JsString>;
+    }
+
+    #[wasm_bindgen_test]
+    fn test_url_rewriter() {
+        let url_rewriter = URLRewriter(create_url_rewriter());
+        assert_eq!(
+            url_rewriter.to_html("https://url.example/blog/article.md"),
+            "https://url.example/blog/article"
+        );
+        assert_eq!(
+            url_rewriter.to_html("https://url.example/blog/assets/image.jpg"),
+            "https://url.example/blog/assets/image.jpg"
+        );
+    }
+}
