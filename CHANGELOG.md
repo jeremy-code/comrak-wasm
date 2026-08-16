@@ -1,5 +1,22 @@
 # comrak-wasm
 
+## 0.0.6
+
+### Patch Changes
+
+- 405b656: fix: enable panic="unwind" and propagate errors in url_rewriter.rs, broken_link_callback.rs
+
+    - Enable panic=unwind for better error handling
+    - url_rewriter.rs, broken_link_callback.rs now panic when an error is thrown in their callbacks
+
+- a5de851: test: add integration tests
+- 95d17f6: chore: export escape_commonmark_inline, escape_commonmark_link_destination
+- f65f07d: test: add unit tests for broken_link_callback.rs, url_rewriter.rs
+- d6ce613: chore: use explicit Function types in broken_link_callback.rs, url_rewriter.rs
+- 22032ac: refactor: move deserialize_options to an inline function
+- 505ea7d: chore: enable SIMD WebAssembly SIMD
+- 00e7c19: build: update wasm-bindgen-test to 0.3.77
+
 ## 0.0.5
 
 ### Patch Changes
