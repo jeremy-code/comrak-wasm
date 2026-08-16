@@ -53,5 +53,9 @@ wasm-opt = [
 opt-level = "z"
 strip = true
 lto = true
-panic = "abort"
+panic = "unwind"
 codegen-units = 1
+
+[profile.release.package."comrak-wasm"]
+# https://github.com/cloudflare/workers-rs/issues/1014
+strip = "debuginfo"

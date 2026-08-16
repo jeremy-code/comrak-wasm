@@ -63,7 +63,7 @@ impl ComrakBrokenLinkCallback for BrokenLinkCallback {
                 &serde_wasm_bindgen::to_value(&BrokenLinkReferenceHelper(broken_link_reference))
                     .ok()?,
             )
-            .ok()?;
+            .expect("An exception was thrown while attempting to resolve a BrokenLinkCallback");
 
         if js_value.is_null_or_undefined() {
             return None;
@@ -71,7 +71,7 @@ impl ComrakBrokenLinkCallback for BrokenLinkCallback {
 
         let resolved_reference = serde_wasm_bindgen::from_value(js_value)
             .map(|ResolvedReferenceHelper(resolved_reference)| resolved_reference)
-            .ok()?;
+            .expect("Invalid resolved reference");
 
         Some(resolved_reference)
     }

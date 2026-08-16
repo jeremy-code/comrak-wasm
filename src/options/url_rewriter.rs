@@ -10,9 +10,9 @@ impl ComrakURLRewriter for URLRewriter {
     fn to_html(&self, url: &str) -> String {
         self.0
             .call1(&JsValue::UNDEFINED, &JsString::from(url))
-            .ok()
-            .and_then(|result| result.as_string())
-            .unwrap_or_else(|| url.to_string())
+            .expect("An exception was thrown while attempting to resolve a URLRewriter")
+            .as_string()
+            .unwrap_or_else(|| url.to_owned())
     }
 }
 

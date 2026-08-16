@@ -1,6 +1,9 @@
+[unstable]
+build-std = ["std", "panic_unwind"]
+
 [build]
 target = "wasm32-unknown-unknown"
 
 [target.wasm32-unknown-unknown]
-rustflags = ["-C", "target-feature=+simd128"]
+rustflags = ["-C", "target-feature=+simd128", "-C", "panic=unwind"]
 runner = "wasm-bindgen-test-runner"

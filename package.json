@@ -8,7 +8,7 @@
         "lint": "cargo clippy --all-targets --all-features",
         "format": "oxfmt && cargo fmt --all",
         "format:check": "oxfmt --check && cargo fmt --all --check",
-        "build": "wasm-pack build --target web --release",
+        "build": "wasm-pack build --target web --release --panic-unwind",
         "dev": "wasm-pack build --target web --dev",
         "test": "wasm-pack test --node",
         "ci:version": "changeset version && pnpm pkg get version | xargs cargo set-version",
