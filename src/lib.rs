@@ -7,6 +7,16 @@ use wasm_bindgen::prelude::*;
 #[derive(Deserialize)]
 struct OptionsHelper<'c>(#[serde(with = "Options")] comrak::Options<'c>);
 
+#[inline]
+fn deserialize_options<'c>(
+    js_value: JsValue,
+) -> Result<comrak::Options<'c>, serde_wasm_bindgen::Error> {
+    match js_value.is_null_or_undefined() {
+        false => serde_wasm_bindgen::from_value(js_value).map(|OptionsHelper(options)| options),
+        true => Ok(comrak::Options::default()),
+    }
+}
+
 #[wasm_bindgen]
 /// Return the version of the crate.
 pub fn version() -> String {
@@ -41,10 +51,7 @@ pub fn markdown_to_commonmark_xml(
     // Otherwise, wasm_bindgen outputs `any` in TypeScript
     #[wasm_bindgen(unchecked_optional_param_type = "Options | undefined | null")] options: JsValue,
 ) -> Result<String, JsError> {
-    let comrak_options: comrak::Options = match options.is_null_or_undefined() {
-        false => serde_wasm_bindgen::from_value(options).map(|OptionsHelper(options)| options)?,
-        true => comrak::Options::default(),
-    };
+    let comrak_options = deserialize_options(options)?;
 
     Ok(comrak::markdown_to_commonmark_xml(md, &comrak_options))
 }
@@ -57,10 +64,7 @@ pub fn markdown_to_html(
     md: &str,
     #[wasm_bindgen(unchecked_optional_param_type = "Options | undefined | null")] options: JsValue,
 ) -> Result<String, JsError> {
-    let comrak_options: comrak::Options = match options.is_null_or_undefined() {
-        false => serde_wasm_bindgen::from_value(options).map(|OptionsHelper(options)| options)?,
-        true => comrak::Options::default(),
-    };
+    let comrak_options = deserialize_options(options)?;
 
     Ok(comrak::markdown_to_html(md, &comrak_options))
 }
