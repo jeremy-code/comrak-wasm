@@ -5,20 +5,17 @@ use js_sys::Function;
 use serde::{Deserialize, Deserializer};
 use std::collections::HashMap;
 use std::fmt;
+use tsify::Tsify;
 use wasm_bindgen::prelude::*;
 
-#[wasm_bindgen(typescript_custom_section)]
-const TS_CODEFENCE_RENDERER: &'static str = r#"
-    export type CodefenceRendererAdapter = (lang: string, meta: string, code: string, sourcepos: Sourcepos | undefined) => string;
-"#;
-
-#[derive(Deserialize)]
-struct NestedFunction {
+#[derive(Tsify, Deserialize)]
+struct CodefenceRenderer {
+    #[tsify(
+        type = "(lang: string, meta: string, code: string, sourcepos: Sourcepos | undefined) => string"
+    )]
     #[serde(with = "serde_wasm_bindgen::preserve")]
-    pub inner: Function,
+    pub write: Function,
 }
-
-struct CodefenceRenderer(Function);
 
 impl ComrakCodefenceRendererAdapter for CodefenceRenderer {
     fn write(
@@ -34,7 +31,7 @@ impl ComrakCodefenceRendererAdapter for CodefenceRenderer {
             .unwrap_or(JsValue::UNDEFINED);
 
         let html = self
-            .0
+            .write
             .call4(
                 &JsValue::UNDEFINED,
                 &JsValue::from_str(lang),
@@ -58,14 +55,15 @@ pub fn deserialize<'de, 'p, D>(
 where
     D: Deserializer<'de>,
 {
-    let js_value: JsValue = serde_wasm_bindgen::preserve::deserialize(deserializer)?;
+    let js_value: JsValue =
+        serde_wasm_bindgen::preserve::deserialize(deserializer).unwrap_or_else(|_| JsValue::null());
 
     if js_value.is_null_or_undefined() {
         return Ok(HashMap::new());
     }
 
-    let heading_adapter: HashMap<String, NestedFunction> = serde_wasm_bindgen::from_value(js_value)
-        .map_err(|err| {
+    let heading_adapter: HashMap<String, CodefenceRenderer> =
+        serde_wasm_bindgen::from_value(js_value).map_err(|err| {
             serde::de::Error::custom(format!("Failed to deserialize heading adapter: {err}"))
         })?;
 
@@ -73,7 +71,7 @@ where
         .into_iter()
         .map(|(lang, nested_function)| {
             let renderer: &'p dyn ComrakCodefenceRendererAdapter =
-                Box::leak(Box::new(CodefenceRenderer(nested_function.inner)));
+                Box::leak(Box::new(nested_function));
             (lang, renderer)
         })
         .collect();
