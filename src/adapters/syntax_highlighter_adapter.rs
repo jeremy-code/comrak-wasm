@@ -88,7 +88,8 @@ pub fn deserialize<'de, 'p, D>(
 where
     D: Deserializer<'de>,
 {
-    let js_value: JsValue = serde_wasm_bindgen::preserve::deserialize(deserializer)?;
+    let js_value: JsValue =
+        serde_wasm_bindgen::preserve::deserialize(deserializer).unwrap_or(JsValue::UNDEFINED);
 
     if js_value.is_null_or_undefined() {
         return Ok(None);
