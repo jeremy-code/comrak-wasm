@@ -19,8 +19,8 @@ fn deserialize_options<'c>(
 
 #[wasm_bindgen]
 /// Return the version of the crate.
-pub fn version() -> String {
-    comrak::version().to_owned()
+pub fn version() -> js_sys::JsString {
+    js_sys::JsString::from(comrak::version())
 }
 
 #[wasm_bindgen(js_name = escapeCommmonmarkInline)]
