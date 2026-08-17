@@ -441,7 +441,8 @@ pub struct Render {
     pub compact_html: bool,
 }
 
-#[derive(Tsify, Deserialize)]
+#[derive(Default, Tsify, Deserialize)]
+#[serde(default)]
 #[serde(remote = "ComrakPlugins")]
 pub struct Plugins<'p> {
     #[serde(with = "RenderPlugins")]
@@ -449,8 +450,10 @@ pub struct Plugins<'p> {
     pub render: ComrakRenderPlugins<'p>,
 }
 
-#[derive(Tsify, Deserialize)]
+#[derive(Default, Tsify, Deserialize)]
+#[serde(default)]
 #[serde(remote = "ComrakRenderPlugins")]
+#[serde(rename_all = "camelCase")]
 pub struct RenderPlugins<'p> {
     #[serde(with = "crate::adapters::codefence_renderer_adapter")]
     #[tsify(type = "Map<String, CodefenceRendererAdapter>")]

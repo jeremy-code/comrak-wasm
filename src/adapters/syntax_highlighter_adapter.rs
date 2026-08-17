@@ -9,6 +9,7 @@ use tsify::Tsify;
 use wasm_bindgen::prelude::*;
 
 #[derive(Tsify, Deserialize)]
+#[serde(rename_all = "camelCase")]
 struct SyntaxHighlighterAdapter {
     #[tsify(type = "(lang: string | undefined, code: string) => string")]
     #[serde(with = "serde_wasm_bindgen::preserve")]
