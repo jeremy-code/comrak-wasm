@@ -1,3 +1,4 @@
+pub mod codefence_renderer_adapter;
 pub mod heading_adapter;
 use comrak::adapters::HeadingMeta as ComrakHeadingMeta;
 use serde::Serialize;

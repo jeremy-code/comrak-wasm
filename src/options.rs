@@ -452,7 +452,8 @@ pub struct Plugins<'p> {
 #[derive(Tsify, Deserialize)]
 #[serde(remote = "ComrakRenderPlugins")]
 pub struct RenderPlugins<'p> {
-    #[serde(skip)]
+    #[serde(with = "crate::adapters::codefence_renderer_adapter")]
+    #[tsify(type = "Map<String, CodefenceRendererAdapter>")]
     pub codefence_renderers: HashMap<String, &'p dyn CodefenceRendererAdapter>,
     #[serde(skip)]
     pub codefence_syntax_highlighter: Option<&'p dyn SyntaxHighlighterAdapter>,

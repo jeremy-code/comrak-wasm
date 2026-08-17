@@ -1,16 +1,12 @@
+use crate::adapters::HeadingMetaHelper;
+use crate::nodes::SourceposHelper;
 use comrak::adapters::{HeadingAdapter as ComrakHeadingAdapter, HeadingMeta};
 use comrak::nodes::Sourcepos as ComrakSourcepos;
 use js_sys::Function;
-use serde::{Deserialize, Deserializer, Serialize};
+use serde::{Deserialize, Deserializer};
 use std::fmt;
 use tsify::Tsify;
 use wasm_bindgen::prelude::*;
-
-use crate::adapters::HeadingMetaHelper;
-use crate::nodes::Sourcepos;
-
-#[derive(Serialize)]
-pub struct SourceposHelper(#[serde(with = "Sourcepos")] ComrakSourcepos);
 
 #[derive(Tsify, Deserialize)]
 struct HeadingAdapter {

@@ -26,3 +26,6 @@ pub struct Sourcepos {
     #[serde(with = "LineColumn")]
     pub end: ComrakLineColumn,
 }
+
+#[derive(Serialize)]
+pub struct SourceposHelper(#[serde(with = "Sourcepos")] pub ComrakSourcepos);
