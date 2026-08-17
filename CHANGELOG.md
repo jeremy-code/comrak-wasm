@@ -1,5 +1,12 @@
 # comrak-wasm
 
+## 0.0.7
+
+### Patch Changes
+
+- 24f4f47: chore: directly serialize JsString in version from static string reference
+- 676ad03: test: add tests for deserialize_options, escape_commonmark_inline, escape_commonmark_link_destination
+
 ## 0.0.6
 
 ### Patch Changes
