@@ -1,7 +1,6 @@
 use crate::nodes::SourceposHelper;
 use comrak::adapters::CodefenceRendererAdapter as ComrakCodefenceRendererAdapter;
 use comrak::nodes::Sourcepos as ComrakSourcepos;
-use js_sys::Function;
 use serde::{Deserialize, Deserializer};
 use std::collections::HashMap;
 use std::fmt;
@@ -14,7 +13,7 @@ struct CodefenceRenderer {
         type = "(lang: string, meta: string, code: string, sourcepos: Sourcepos | undefined) => string"
     )]
     #[serde(with = "serde_wasm_bindgen::preserve")]
-    pub write: Function,
+    pub write: js_sys::Function<fn(JsValue, JsValue, JsValue, JsValue) -> JsValue>,
 }
 
 impl ComrakCodefenceRendererAdapter for CodefenceRenderer {
@@ -67,14 +66,15 @@ where
             serde::de::Error::custom(format!("Failed to deserialize heading adapter: {err}"))
         })?;
 
-    let contacts: HashMap<String, &'p dyn ComrakCodefenceRendererAdapter> = heading_adapter
-        .into_iter()
-        .map(|(lang, nested_function)| {
-            let renderer: &'p dyn ComrakCodefenceRendererAdapter =
-                Box::leak(Box::new(nested_function));
-            (lang, renderer)
-        })
-        .collect();
+    let codefence_renderers: HashMap<String, &'p dyn ComrakCodefenceRendererAdapter> =
+        heading_adapter
+            .into_iter()
+            .map(|(lang, codefence_renderer)| {
+                let renderer: &'p dyn ComrakCodefenceRendererAdapter =
+                    Box::leak(Box::new(codefence_renderer));
+                (lang, renderer)
+            })
+            .collect();
 
-    Ok(contacts)
+    Ok(codefence_renderers)
 }

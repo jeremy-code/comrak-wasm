@@ -1,5 +1,4 @@
 use comrak::adapters::SyntaxHighlighterAdapter as ComrakSyntaxHighlighterAdapter;
-use js_sys::Function;
 use serde::Deserialize;
 use serde::Deserializer;
 use std::borrow::Cow;
@@ -13,13 +12,13 @@ use wasm_bindgen::prelude::*;
 struct SyntaxHighlighterAdapter {
     #[tsify(type = "(lang: string | undefined, code: string) => string")]
     #[serde(with = "serde_wasm_bindgen::preserve")]
-    write_highlighted: Function<fn(JsValue, JsValue) -> JsValue>,
+    write_highlighted: js_sys::Function<fn(JsValue, JsValue) -> JsValue>,
     #[tsify(type = "(attributes: Map<string, string>) => string")]
     #[serde(with = "serde_wasm_bindgen::preserve")]
-    write_pre_tag: Function<fn(JsValue) -> JsValue>,
+    write_pre_tag: js_sys::Function<fn(JsValue) -> JsValue>,
     #[tsify(type = "(attributes: Map<string, string>) => string")]
     #[serde(with = "serde_wasm_bindgen::preserve")]
-    write_code_tag: Function<fn(JsValue) -> JsValue>,
+    write_code_tag: js_sys::Function<fn(JsValue) -> JsValue>,
 }
 
 impl ComrakSyntaxHighlighterAdapter for SyntaxHighlighterAdapter {
@@ -29,21 +28,20 @@ impl ComrakSyntaxHighlighterAdapter for SyntaxHighlighterAdapter {
         lang: Option<&str>,
         code: &str,
     ) -> fmt::Result {
-        let lang_js = lang.map_or(JsValue::UNDEFINED, JsValue::from_str);
-
         let html = self
             .write_highlighted
-            .call2(&JsValue::UNDEFINED, &lang_js, &JsValue::from_str(code))
+            .call2(
+                &JsValue::UNDEFINED,
+                &lang.map_or(JsValue::UNDEFINED, JsValue::from_str),
+                &JsValue::from_str(code),
+            )
             .ok()
             .and_then(|result| result.as_string());
 
         match html {
             Some(html) => output.write_str(&html),
             // Fall back to writing the escaped, unhighlighted code so that
-            // content isn't silently dropped if the adapter fails. Never
-            // return `Err` here: comrak's top-level render functions unwrap
-            // this Result, so an `Err` would panic (and abort) instead of
-            // just losing highlighting for this block.
+            // content isn't silently dropped if the adapter fails
             None => comrak::html::escape(output, code),
         }
     }

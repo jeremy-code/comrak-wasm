@@ -2,7 +2,6 @@ use crate::adapters::HeadingMetaHelper;
 use crate::nodes::SourceposHelper;
 use comrak::adapters::{HeadingAdapter as ComrakHeadingAdapter, HeadingMeta};
 use comrak::nodes::Sourcepos as ComrakSourcepos;
-use js_sys::Function;
 use serde::{Deserialize, Deserializer};
 use std::fmt;
 use tsify::Tsify;
@@ -12,10 +11,10 @@ use wasm_bindgen::prelude::*;
 struct HeadingAdapter {
     #[tsify(type = "(heading: HeadingMeta, sourcepos: Sourcepos | undefined) => string")]
     #[serde(with = "serde_wasm_bindgen::preserve")]
-    enter: Function,
+    enter: js_sys::Function<fn(JsValue, JsValue) -> JsValue>,
     #[tsify(type = "(heading: HeadingMeta) => string")]
     #[serde(with = "serde_wasm_bindgen::preserve")]
-    exit: Function,
+    exit: js_sys::Function<fn(JsValue) -> JsValue>,
 }
 
 impl ComrakHeadingAdapter for HeadingAdapter {
