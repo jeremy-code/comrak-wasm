@@ -1,5 +1,14 @@
 # comrak-wasm
 
+## 0.0.7
+
+### Patch Changes
+
+- 1c12828: test: replace assert_eq! with assert! for bools
+- 24f4f47: chore: directly serialize JsString in version from static string reference
+- 676ad03: test: add tests for deserialize_options, escape_commonmark_inline, escape_commonmark_link_destination
+- 6bd40bf: chore: update deps
+
 ## 0.0.6
 
 ### Patch Changes
