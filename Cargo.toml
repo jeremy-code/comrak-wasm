@@ -32,7 +32,7 @@ comrak = { version = "0.54.0", default-features = false, features = [
 js-sys = "0.3.104"
 serde = { version = "1.0.229", features = ["derive"] }
 serde-wasm-bindgen = "0.6.5"
-tsify = { version = "0.5.6", features = ["js", "wasm-bindgen"] }
+tsify = { version = "0.5.8", features = ["js", "wasm-bindgen"] }
 wasm-bindgen = "0.2.127"
 
 [dev-dependencies]
