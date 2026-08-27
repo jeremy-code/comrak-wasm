@@ -97,12 +97,12 @@ export const create_options = () => ({
     #[wasm_bindgen_test]
     fn test_deserialize_options() {
         let options = deserialize_options(create_options()).unwrap();
-        assert_eq!(options.extension.strikethrough, true);
+        assert!(options.extension.strikethrough);
         assert_matches!(
             options.render.alert_style,
             comrak::options::AlertStyleType::Semantic
         );
-        assert_eq!(options.parse.smart, true);
+        assert!(options.parse.smart);
 
         let image_url_rewriter = options.extension.image_url_rewriter.as_ref().unwrap();
 
