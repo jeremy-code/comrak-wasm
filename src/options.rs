@@ -2,12 +2,15 @@ mod broken_link_callback;
 mod url_rewriter;
 
 use comrak::Options as ComrakOptions;
+use comrak::adapters::HeadingAdapter as ComrakHeadingAdapter;
+use comrak::adapters::{CodefenceRendererAdapter, SyntaxHighlighterAdapter};
 use comrak::options::{
     AlertStyleType as ComrakAlertStyleType, BrokenLinkCallback, Extension as ComrakExtension,
-    ListStyleType as ComrakListStyleType, Parse as ComrakParse, Render as ComrakRender,
-    URLRewriter,
+    ListStyleType as ComrakListStyleType, Parse as ComrakParse, Plugins as ComrakPlugins,
+    Render as ComrakRender, RenderPlugins as ComrakRenderPlugins, URLRewriter,
 };
 use serde::Deserialize;
+use std::collections::HashMap;
 use std::sync::Arc;
 use tsify::Tsify;
 
@@ -436,4 +439,29 @@ pub struct Render {
     /// Normally comrak puts a `\n` after closing tags like `</p>`, `</li>`,
     /// etc. With this option on, those newlines are omitted.
     pub compact_html: bool,
+}
+
+#[derive(Default, Tsify, Deserialize)]
+#[serde(default)]
+#[serde(remote = "ComrakPlugins")]
+pub struct Plugins<'p> {
+    #[serde(with = "RenderPlugins")]
+    #[tsify(type = "RenderPlugins")]
+    pub render: ComrakRenderPlugins<'p>,
+}
+
+#[derive(Default, Tsify, Deserialize)]
+#[serde(default)]
+#[serde(remote = "ComrakRenderPlugins")]
+#[serde(rename_all = "camelCase")]
+pub struct RenderPlugins<'p> {
+    #[serde(with = "crate::adapters::codefence_renderer_adapter")]
+    #[tsify(type = "Map<String, CodefenceRendererAdapter>")]
+    pub codefence_renderers: HashMap<String, &'p dyn CodefenceRendererAdapter>,
+    #[serde(with = "crate::adapters::syntax_highlighter_adapter")]
+    #[tsify(type = "SyntaxHighlighterAdapter | null | undefined")]
+    pub codefence_syntax_highlighter: Option<&'p dyn SyntaxHighlighterAdapter>,
+    #[serde(with = "crate::adapters::heading_adapter")]
+    #[tsify(type = "HeadingAdapter | null | undefined")]
+    pub heading_adapter: Option<&'p dyn ComrakHeadingAdapter>,
 }

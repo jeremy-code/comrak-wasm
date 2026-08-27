@@ -1,6 +1,9 @@
+mod adapters;
+mod nodes;
 mod options;
 
 use options::Options;
+use options::Plugins;
 use serde::Deserialize;
 use wasm_bindgen::prelude::*;
 
@@ -14,6 +17,19 @@ fn deserialize_options<'c>(
     match js_value.is_null_or_undefined() {
         false => serde_wasm_bindgen::from_value(js_value).map(|OptionsHelper(options)| options),
         true => Ok(comrak::Options::default()),
+    }
+}
+
+#[derive(Deserialize)]
+struct PluginsHelper<'p>(#[serde(with = "Plugins")] comrak::options::Plugins<'p>);
+
+#[inline]
+fn deserialize_plugins<'p>(
+    js_value: JsValue,
+) -> Result<comrak::options::Plugins<'p>, serde_wasm_bindgen::Error> {
+    match js_value.is_null_or_undefined() {
+        false => serde_wasm_bindgen::from_value(js_value).map(|PluginsHelper(options)| options),
+        true => Ok(comrak::options::Plugins::default()),
     }
 }
 
@@ -56,6 +72,25 @@ pub fn markdown_to_commonmark_xml(
     Ok(comrak::markdown_to_commonmark_xml(md, &comrak_options))
 }
 
+#[wasm_bindgen(js_name = markdownToCommonmarkXmlWithPlugins)]
+/// Render Markdown to CommonMark XML using plugins.
+///
+/// See <https://github.com/commonmark/commonmark-spec/blob/master/CommonMark.dtd>.
+pub fn markdown_to_commonmark_xml_with_plugins(
+    md: &str,
+    #[wasm_bindgen(unchecked_optional_param_type = "Options | undefined | null")] options: JsValue,
+    #[wasm_bindgen(unchecked_optional_param_type = "Plugins | undefined | null")] plugins: JsValue,
+) -> Result<String, JsError> {
+    let comrak_options = deserialize_options(options)?;
+    let comrak_plugins = deserialize_plugins(plugins)?;
+
+    Ok(comrak::markdown_to_commonmark_xml_with_plugins(
+        md,
+        &comrak_options,
+        &comrak_plugins,
+    ))
+}
+
 #[wasm_bindgen(js_name = markdownToHtml)]
 /// Render Markdown to HTML.
 ///
@@ -67,6 +102,25 @@ pub fn markdown_to_html(
     let comrak_options = deserialize_options(options)?;
 
     Ok(comrak::markdown_to_html(md, &comrak_options))
+}
+
+#[wasm_bindgen(js_name = markdownToHtmlWithPlugins)]
+/// Render Markdown to HTML using plugins.
+///
+/// See the documentation of the crate root for an example.
+pub fn markdown_to_html_with_plugins(
+    md: &str,
+    #[wasm_bindgen(unchecked_optional_param_type = "Options | undefined | null")] options: JsValue,
+    #[wasm_bindgen(unchecked_optional_param_type = "Plugins | undefined | null")] plugins: JsValue,
+) -> Result<String, JsError> {
+    let comrak_options = deserialize_options(options)?;
+    let comrak_plugins = deserialize_plugins(plugins)?;
+
+    Ok(comrak::markdown_to_html_with_plugins(
+        md,
+        &comrak_options,
+        &comrak_plugins,
+    ))
 }
 
 #[cfg(test)]
