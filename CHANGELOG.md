@@ -1,5 +1,11 @@
 # comrak-wasm
 
+## 0.0.8
+
+### Patch Changes
+
+- fa820bd: feat: add plugin support
+
 ## 0.0.7
 
 ### Patch Changes
