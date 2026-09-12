@@ -123,6 +123,17 @@ pub fn markdown_to_html_with_plugins(
     ))
 }
 
+#[wasm_bindgen(js_name = markdownToCommonmark)]
+/// Render Markdown back to CommonMark.
+pub fn markdown_to_commonmark(
+    md: &str,
+    #[wasm_bindgen(unchecked_optional_param_type = "Options | undefined | null")] options: JsValue,
+) -> Result<String, JsError> {
+    let comrak_options = deserialize_options(options)?;
+
+    Ok(comrak::markdown_to_commonmark(md, &comrak_options))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
