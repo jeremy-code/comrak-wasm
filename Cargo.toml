@@ -24,19 +24,19 @@ crate-type = ["cdylib", "rlib"]
 # https://github.com/kivikakk/comrak/blob/c5a3b45ce94460e37c54408cd51d9b526e8cb4d8/Cargo.toml#L71
 # https://github.com/kivikakk/comrak/pull/812
 # https://github.com/trishume/syntect/#pure-rust-fancy-regex-mode-without-onig
-comrak = { version = "0.54.0", default-features = false, features = [
+comrak = { version = "0.55.0", default-features = false, features = [
     "bon",
     "cli",
     "syntect-fancy",
 ] }
-js-sys = "0.3.104"
+js-sys = "0.3.105"
 serde = { version = "1.0.229", features = ["derive"] }
 serde-wasm-bindgen = "0.6.5"
 tsify = { version = "0.5.8", features = ["js", "wasm-bindgen"] }
-wasm-bindgen = "0.2.127"
+wasm-bindgen = "0.2.128"
 
 [dev-dependencies]
-wasm-bindgen-test = "0.3.77"
+wasm-bindgen-test = "0.3.78"
 
 [package.metadata.wasm-pack.profile.release]
 wasm-opt = [
