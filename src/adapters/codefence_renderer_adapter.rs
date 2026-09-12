@@ -8,11 +8,16 @@ use tsify::Tsify;
 use wasm_bindgen::prelude::*;
 
 #[derive(Tsify, Deserialize)]
+/// Implement this adapter for custom rendering of codefence blocks.
 struct CodefenceRendererAdapter {
     #[tsify(
         type = "(lang: string, meta: string, code: string, sourcepos: Sourcepos | undefined) => string"
     )]
     #[serde(with = "serde_wasm_bindgen::preserve")]
+    /// Render a codefence block.
+    ///
+    /// lang: Name of the programming language (the first token of the info string).
+    /// meta: The remaining codefence info string after the language token, trimmed.
     pub write: js_sys::Function<fn(JsValue, JsValue, JsValue, JsValue) -> JsValue>,
 }
 

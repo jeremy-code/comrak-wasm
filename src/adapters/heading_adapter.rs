@@ -8,12 +8,18 @@ use tsify::Tsify;
 use wasm_bindgen::prelude::*;
 
 #[derive(Tsify, Deserialize)]
+/// Implement this adapter for creating a plugin for custom headings (`h1`, `h2`, etc.). The `enter`
+/// method defines what's rendered prior the AST content of the heading while the `exit` method
+/// defines what's rendered after it. Both methods provide access to a [`HeadingMeta`] struct and
+/// leave the AST content of the heading unchanged.
 struct HeadingAdapter {
     #[tsify(type = "(heading: HeadingMeta, sourcepos: Sourcepos | undefined) => string")]
     #[serde(with = "serde_wasm_bindgen::preserve")]
+    /// Render the opening tag.
     enter: js_sys::Function<fn(JsValue, JsValue) -> JsValue>,
     #[tsify(type = "(heading: HeadingMeta) => string")]
     #[serde(with = "serde_wasm_bindgen::preserve")]
+    /// Render the closing tag.
     exit: js_sys::Function<fn(JsValue) -> JsValue>,
 }
 

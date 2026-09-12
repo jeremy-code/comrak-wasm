@@ -444,9 +444,11 @@ pub struct Render {
 #[derive(Default, Tsify, Deserialize)]
 #[serde(default)]
 #[serde(remote = "ComrakPlugins")]
+/// Umbrella plugins struct.
 pub struct Plugins<'p> {
     #[serde(with = "RenderPlugins")]
     #[tsify(type = "RenderPlugins")]
+    /// Configure render-time plugins.
     pub render: ComrakRenderPlugins<'p>,
 }
 
@@ -454,16 +456,24 @@ pub struct Plugins<'p> {
 #[serde(default)]
 #[serde(remote = "ComrakRenderPlugins")]
 #[serde(rename_all = "camelCase")]
+/// Plugins for alternative rendering.
 pub struct RenderPlugins<'p> {
     #[serde(with = "crate::adapters::codefence_renderer_adapter")]
     #[tsify(type = "Map<String, CodefenceRendererAdapter>")]
+    /// Provide language-specific renderers for codefence blocks.
+    ///
+    /// `math` codefence blocks are handled separately by Comrak's built-in math renderer,
+    /// so entries keyed by `"math"` in this map are not used.
     pub codefence_renderers: HashMap<String, &'p dyn CodefenceRendererAdapter>,
     #[serde(with = "crate::adapters::syntax_highlighter_adapter")]
     #[tsify(
         type = "SyntaxHighlighterAdapter | SynctectSyntaxHighlighterAdapter | null | undefined"
     )]
+    /// Provide a syntax highlighter adapter implementation for syntax
+    /// highlighting of codefence blocks.
     pub codefence_syntax_highlighter: Option<&'p dyn SyntaxHighlighterAdapter>,
     #[serde(with = "crate::adapters::heading_adapter")]
     #[tsify(type = "HeadingAdapter | null | undefined")]
+    /// Optional heading adapter
     pub heading_adapter: Option<&'p dyn ComrakHeadingAdapter>,
 }

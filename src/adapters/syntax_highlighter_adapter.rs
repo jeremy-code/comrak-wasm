@@ -18,15 +18,28 @@ struct SynctectSyntaxHighlighterAdapter {
 
 #[derive(Tsify, Deserialize)]
 #[serde(rename_all = "camelCase")]
+/// Implement this adapter for creating a plugin for custom syntax highlighting of codefence blocks.
 struct SyntaxHighlighterAdapter {
     #[tsify(type = "(lang: string | undefined, code: string) => string")]
     #[serde(with = "serde_wasm_bindgen::preserve")]
+    /// Generates a syntax highlighted HTML output.
+    ///
+    /// lang: Name of the programming language (the info string of the codefence block after the initial "```" part).
+    /// code: The source code to be syntax highlighted.
     write_highlighted: js_sys::Function<fn(JsValue, JsValue) -> JsValue>,
     #[tsify(type = "(attributes: Map<string, string>) => string")]
     #[serde(with = "serde_wasm_bindgen::preserve")]
+    /// Generates the opening `<pre>` tag. Some syntax highlighter libraries might include their own
+    /// `<pre>` tag possibly with some HTML attribute pre-filled.
+    ///
+    /// `attributes`: A map of HTML attributes provided by Comrak.
     write_pre_tag: js_sys::Function<fn(JsValue) -> JsValue>,
     #[tsify(type = "(attributes: Map<string, string>) => string")]
     #[serde(with = "serde_wasm_bindgen::preserve")]
+    /// Generates the opening `<code>` tag. Some syntax highlighter libraries might include their own
+    /// `<code>` tag possibly with some HTML attribute pre-filled.
+    ///
+    /// `attributes`: A map of HTML attributes provided by Comrak.
     write_code_tag: js_sys::Function<fn(JsValue) -> JsValue>,
 }
 
