@@ -14,6 +14,7 @@ struct CodefenceRendererAdapter {
         type = "(lang: string, meta: string, code: string, sourcepos: Sourcepos | undefined) => string"
     )]
     #[serde(with = "serde_wasm_bindgen::preserve")]
+    #[allow(clippy::type_complexity)]
     /// Render a codefence block.
     ///
     /// lang: Name of the programming language (the first token of the info string).
