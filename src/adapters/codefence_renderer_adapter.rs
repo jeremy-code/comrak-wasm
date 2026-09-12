@@ -8,7 +8,7 @@ use tsify::Tsify;
 use wasm_bindgen::prelude::*;
 
 #[derive(Tsify, Deserialize)]
-struct CodefenceRenderer {
+struct CodefenceRendererAdapter {
     #[tsify(
         type = "(lang: string, meta: string, code: string, sourcepos: Sourcepos | undefined) => string"
     )]
@@ -16,7 +16,7 @@ struct CodefenceRenderer {
     pub write: js_sys::Function<fn(JsValue, JsValue, JsValue, JsValue) -> JsValue>,
 }
 
-impl ComrakCodefenceRendererAdapter for CodefenceRenderer {
+impl ComrakCodefenceRendererAdapter for CodefenceRendererAdapter {
     fn write(
         &self,
         output: &mut dyn fmt::Write,
@@ -61,7 +61,7 @@ where
         return Ok(HashMap::new());
     }
 
-    let heading_adapter: HashMap<String, CodefenceRenderer> =
+    let heading_adapter: HashMap<String, CodefenceRendererAdapter> =
         serde_wasm_bindgen::from_value(js_value).map_err(|err| {
             serde::de::Error::custom(format!("Failed to deserialize heading adapter: {err}"))
         })?;
