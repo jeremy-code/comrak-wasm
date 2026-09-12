@@ -1,5 +1,15 @@
 # comrak-wasm
 
+## 0.0.9
+
+### Patch Changes
+
+- d7de502: feat: add markdown_to_commonmark
+- 20aaa7c: docs: update comments in structs for typegen
+- c986b3e: feat: implement SynctectSyntaxHighlighterAdapter for synctect syntax highlighting
+- ff8665e: chore: update deps
+- 8489019: fix: rename CodefenceRenderer struct to CodefenceRendererAdapter
+
 ## 0.0.8
 
 ### Patch Changes
