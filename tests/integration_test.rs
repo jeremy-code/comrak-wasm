@@ -63,21 +63,11 @@ fn test_markdown_to_commonmark_xml_with_options() {
 }
 
 #[wasm_bindgen(inline_js = r#"
-const escapeHtmlTag = (htmlTag) => htmlTag.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 export const create_plugins = () => ({
     render: {
-        codefenceRenderers: new Map([["mermaid", { write: (lang, meta, code) => `<figure class="${lang}" data-meta="${meta}">${code}</figure>\n` } ]]),
         codefenceSyntaxHighlighter: {
-            writeHighlighted: (lang, code) => `<!--${lang}-->${code}</span>`,
-            writePreTag: (attributes) =>
-                `<pre data-json="${escapeHtmlTag(JSON.stringify(Object.fromEntries(attributes)))}">`,
-            writeCodeTag: (attributes) =>
-                `<code data-json="${escapeHtmlTag(JSON.stringify(Object.fromEntries(attributes)))}">`,
-        },
-        headingAdapter: {
-            enter: (heading) => `<h${heading.level} data-heading="true">`,
-            exit: (heading) => `</h${heading.level}>`,
+            theme: "base16-ocean.dark"
         },
     },
 });
@@ -87,13 +77,13 @@ extern "C" {
 }
 
 #[wasm_bindgen_test]
-fn test_markdown_to_html_with_plugins() {
+fn test_markdown_to_html_with_syntect() {
     let options = js_sys::JSON::parse(include_str!("testdata/options.json")).unwrap();
     let result = markdown_to_html_with_plugins(
-        include_str!("testdata/test-markdown-plugins.md"),
+        include_str!("testdata/test-markdown-syntect.md"),
         options,
         create_plugins(),
     );
-    let html = include_str!("testdata/test-html-plugins.html");
+    let html = include_str!("testdata/test-html-syntect.html");
     assert_eq!(result.unwrap(), html);
 }
