@@ -459,7 +459,9 @@ pub struct RenderPlugins<'p> {
     #[tsify(type = "Map<String, CodefenceRendererAdapter>")]
     pub codefence_renderers: HashMap<String, &'p dyn CodefenceRendererAdapter>,
     #[serde(with = "crate::adapters::syntax_highlighter_adapter")]
-    #[tsify(type = "SyntaxHighlighterAdapter | null | undefined")]
+    #[tsify(
+        type = "SyntaxHighlighterAdapter | SynctectSyntaxHighlighterAdapter | null | undefined"
+    )]
     pub codefence_syntax_highlighter: Option<&'p dyn SyntaxHighlighterAdapter>,
     #[serde(with = "crate::adapters::heading_adapter")]
     #[tsify(type = "HeadingAdapter | null | undefined")]

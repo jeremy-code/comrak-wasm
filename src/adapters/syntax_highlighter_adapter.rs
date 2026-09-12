@@ -9,6 +9,15 @@ use wasm_bindgen::prelude::*;
 
 #[derive(Tsify, Deserialize)]
 #[serde(rename_all = "camelCase")]
+struct SynctectSyntaxHighlighterAdapter {
+    #[tsify(
+        type = "'base16-ocean.dark' | 'base16-eighties.dark' | 'base16-mocha.dark' | 'base16-ocean.light' | 'InspiredGitHub' | 'Solarized (dark)' | 'Solarized (light)' | undefined"
+    )]
+    theme: Option<String>,
+}
+
+#[derive(Tsify, Deserialize)]
+#[serde(rename_all = "camelCase")]
 struct SyntaxHighlighterAdapter {
     #[tsify(type = "(lang: string | undefined, code: string) => string")]
     #[serde(with = "serde_wasm_bindgen::preserve")]
@@ -93,12 +102,25 @@ where
         return Ok(None);
     }
 
-    let syntax_highlighter_adapter: SyntaxHighlighterAdapter =
-        serde_wasm_bindgen::from_value(js_value).map_err(|err| {
-            serde::de::Error::custom(format!(
-                "Failed to deserialize syntax highlighter adapter: {err}"
-            ))
-        })?;
+    let syntect_syntax_highlighter_adapter_result: Result<
+        SynctectSyntaxHighlighterAdapter,
+        serde_wasm_bindgen::Error,
+    > = serde_wasm_bindgen::from_value(js_value.clone());
 
-    Ok(Some(Box::leak(Box::new(syntax_highlighter_adapter))))
+    if let Ok(syntect_syntax_highlighter_adapter) = syntect_syntax_highlighter_adapter_result {
+        Ok(Some(Box::leak(Box::new(
+            comrak::plugins::syntect::SyntectAdapter::new(
+                syntect_syntax_highlighter_adapter.theme.as_deref(),
+            ),
+        ))))
+    } else {
+        let syntax_highlighter_adapter: SyntaxHighlighterAdapter =
+            serde_wasm_bindgen::from_value(js_value).map_err(|err| {
+                serde::de::Error::custom(format!(
+                    "Failed to deserialize syntax highlighter adapter: {err}"
+                ))
+            })?;
+
+        Ok(Some(Box::leak(Box::new(syntax_highlighter_adapter))))
+    }
 }
