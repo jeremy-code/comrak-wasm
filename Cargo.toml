@@ -59,3 +59,8 @@ codegen-units = 1
 [profile.release.package."comrak-wasm"]
 # https://github.com/cloudflare/workers-rs/issues/1014
 strip = "debuginfo"
+
+[profile.release.package.comrak]
+# Increases throughput by 40.391% while only increasing bundle size 2373072 ->
+# 2403700 bytes (1.29%)
+opt-level = "s"
