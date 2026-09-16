@@ -1,5 +1,11 @@
 # comrak-wasm
 
+## 0.0.10
+
+### Patch Changes
+
+- d22c7fa: feat: optimize release profile for comrak package to improve throughput
+
 ## 0.0.9
 
 ### Patch Changes
