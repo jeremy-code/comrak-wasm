@@ -19,18 +19,18 @@ jobs:
             pull-requests: write # Required to create PR
         steps:
             - name: Check out Git repository
-              uses: actions/checkout@v7
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
               with:
                   # Fetch all history for all branches and tags so that changesets can
                   # compare against the correct base branch
                   fetch-depth: 0
 
             - name: Set up pnpm package manager
-              uses: pnpm/setup@v2
+              uses: pnpm/setup@fbda4c85fc2e1e08721cd8763afea8f48d60f024 # v3.0.0
               with:
                   cache: true
 
-            - uses: cargo-bins/cargo-binstall@main
+            - uses: cargo-bins/cargo-binstall@c06f6a0003f7c6165a00c89d1697731c9e8a5c72 # v1.25.2
               with:
                   version: 1.21.1
 
@@ -48,7 +48,7 @@ jobs:
               run: pnpm run build
 
             - name: Create pull request for version bump and publish to npm
-              uses: changesets/action@v2
+              uses: changesets/action@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
               with:
                   publish-script: pnpm run ci:publish
                   # Has to be in its own script, otherwise, error "Too many
