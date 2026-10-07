@@ -4,9 +4,9 @@
 # $CHANGESETS_OUTPUT so that GitHub releases and Git tags can be pushed
 # https://github.com/changesets/changesets/issues/2025
 
-pnpm stage publish pkg --recursive --report-summary
+pnpm stage publish --dir pkg --recursive --report-summary
 
-if [[ ! -f pnpm-publish-summary.json ]]; then
+if [[ ! -f pkg/pnpm-publish-summary.json ]]; then
   echo "Unable to find pnpm-publish-summary.json" >&2
   exit 1
 fi
@@ -16,7 +16,7 @@ fi
 jq \
   --compact-output \
   '.publishedPackages[] | {type: "git-tag", tag: "v\(.version)", packageName: .name}' \
-  pnpm-publish-summary.json \
+  pkg/pnpm-publish-summary.json \
   > $CHANGESETS_OUTPUT
 
-rm -f pnpm-publish-summary.json
+rm -f pkg/pnpm-publish-summary.json
