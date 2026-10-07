@@ -44,10 +44,6 @@ pub struct Extension<'c> {
     /// [strikethrough extension](https://github.github.com/gfm/#strikethrough-extension-)
     /// from the GFM spec.
     pub strikethrough: bool,
-    /// Enables the
-    /// [tagfilter extension](https://github.github.com/gfm/#disallowed-raw-html-extension-)
-    /// from the GFM spec.
-    pub tagfilter: bool,
     /// Enables the [table extension](https://github.github.com/gfm/#tables-extension-)
     /// from the GFM spec.
     pub table: bool,
