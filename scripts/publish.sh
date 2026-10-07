@@ -4,7 +4,7 @@
 # $CHANGESETS_OUTPUT so that GitHub releases and Git tags can be pushed
 # https://github.com/changesets/changesets/issues/2025
 
-pnpm stage publish --recursive --report-summary
+pnpm stage publish pkg --recursive --report-summary
 
 if [[ ! -f pnpm-publish-summary.json ]]; then
   echo "Unable to find pnpm-publish-summary.json" >&2
