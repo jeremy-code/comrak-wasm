@@ -12,7 +12,7 @@
         "dev": "wasm-pack build --target web --dev",
         "test": "wasm-pack test --node",
         "ci:version": "changeset version && pnpm pkg get version | xargs cargo set-version",
-        "ci:publish": "pnpm stage publish pkg"
+        "ci:publish": "./scripts/publish.sh"
     },
     "devDependencies": {
         "@changesets/cli": "^3.0.3",
