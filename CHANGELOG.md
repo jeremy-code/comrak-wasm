@@ -1,5 +1,13 @@
 # comrak-wasm
 
+## 0.0.11
+
+### Patch Changes
+
+- c7dfc31: chore: update deps
+
+    - remove tagfilter which was removed in comrak v0.56.0
+
 ## 0.0.10
 
 ### Patch Changes
