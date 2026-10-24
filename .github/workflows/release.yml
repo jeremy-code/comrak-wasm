@@ -26,7 +26,7 @@ jobs:
                   fetch-depth: 0
 
             - name: Set up pnpm package manager
-              uses: pnpm/setup@fbda4c85fc2e1e08721cd8763afea8f48d60f024 # v3.0.0
+              uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
               with:
                   cache: true
                   install: true
@@ -34,7 +34,7 @@ jobs:
             - name: Set up Rust toolchain
               uses: actions-rust-lang/setup-rust-toolchain@ecabd13d1c56bd1345c230e542e9144811ad706f # v2.0.0
 
-            - uses: cargo-bins/cargo-binstall@c06f6a0003f7c6165a00c89d1697731c9e8a5c72 # v1.25.2
+            - uses: cargo-bins/cargo-binstall@8a2045612414e945291083f820cd50b4d8fc2218 # v1.26.0
               with:
                   version: 1.21.1
 
