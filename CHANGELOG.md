@@ -1,5 +1,11 @@
 # comrak-wasm
 
+## 0.0.12
+
+### Patch Changes
+
+- 04c41db: chore: update to comrak 0.57.0 from 0.56.0
+
 ## 0.0.11
 
 ### Patch Changes
