@@ -24,7 +24,7 @@ crate-type = ["cdylib", "rlib"]
 # https://github.com/kivikakk/comrak/blob/c5a3b45ce94460e37c54408cd51d9b526e8cb4d8/Cargo.toml#L71
 # https://github.com/kivikakk/comrak/pull/812
 # https://github.com/trishume/syntect/#pure-rust-fancy-regex-mode-without-onig
-comrak = { version = "0.56.0", default-features = false, features = [
+comrak = { version = "0.57.0", default-features = false, features = [
     "bon",
     "cli",
     "syntect-fancy",
